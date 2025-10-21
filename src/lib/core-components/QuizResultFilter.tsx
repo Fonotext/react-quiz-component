@@ -1,20 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { AppLocale } from '../types';
 
-function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
+type FilterValue = 'all' | 'correct' | 'incorrect' | 'unanswered';
+
+interface QuizResultFilterProps {
+  filteredValue: FilterValue;
+  handleChange: (event: { target: { value: FilterValue } }) => void;
+  appLocale: AppLocale;
+}
+
+function QuizResultFilter({ filteredValue, handleChange, appLocale }: QuizResultFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (value) => {
+  const handleOptionClick = (value: FilterValue) => {
     handleChange({ target: { value } });
     setIsOpen(false);
   };
 
   const selectedOptionClass = isOpen ? 'selected-open' : '';
-  const selectedValuesLocale = {
+  const selectedValuesLocale: Record<FilterValue, string> = {
     all: appLocale.resultFilterAll,
     correct: appLocale.resultFilterCorrect,
     incorrect: appLocale.resultFilterIncorrect,
@@ -22,11 +31,11 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
   };
 
   useEffect(() => {
-    const handleOutsideClick = (e) => {
+    const handleOutsideClick = (e: MouseEvent) => {
       if (
         isOpen
         && dropdownRef.current
-        && !dropdownRef.current.contains(e.target)
+        && !dropdownRef.current.contains(e.target as Node)
       ) {
         setIsOpen(false);
       }

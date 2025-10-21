@@ -1,19 +1,29 @@
 import React, { useEffect } from 'react';
 import Explanation from './Explanation';
+import { QuizQuestion } from '../types';
 
-const renderMessageForCorrectAnswer = (question) => {
+const renderMessageForCorrectAnswer = (question: QuizQuestion) => {
   const defaultMessage = 'You are correct. Please click Next to continue.';
   return question.messageForCorrectAnswer || defaultMessage;
 };
 
-const renderMessageForIncorrectAnswer = (question) => {
+const renderMessageForIncorrectAnswer = (question: QuizQuestion) => {
   const defaultMessage = 'Incorrect answer. Please try again.';
   return question.messageForIncorrectAnswer || defaultMessage;
 };
 
+interface InstantFeedbackProps {
+  showInstantFeedback?: boolean;
+  incorrectAnswer: boolean;
+  correctAnswer: boolean;
+  question: QuizQuestion;
+  onQuestionSubmit?: (obj: { question: QuizQuestion; userAnswer: any; isCorrect: boolean }) => void;
+  userAnswer: any;
+}
+
 function InstantFeedback({
   showInstantFeedback, incorrectAnswer, correctAnswer, question, onQuestionSubmit, userAnswer,
-}) {
+}: InstantFeedbackProps) {
   useEffect(() => {
     if (onQuestionSubmit && (correctAnswer || incorrectAnswer)) {
       onQuestionSubmit({ question, userAnswer, isCorrect: correctAnswer });

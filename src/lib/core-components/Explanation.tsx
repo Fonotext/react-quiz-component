@@ -1,6 +1,12 @@
 import React from 'react';
+import { QuizQuestion } from '../types';
 
-function Explanation({ question, isResultPage }) {
+interface ExplanationProps {
+  question: QuizQuestion;
+  isResultPage: boolean;
+}
+
+function Explanation({ question, isResultPage }: ExplanationProps) {
   const { explanation } = question;
 
   if (!explanation) {

@@ -16,7 +16,7 @@ const extensions = ['.ts', '.tsx', '.js', '.jsx'];
 
 export default [
   {
-    input: './src/lib/Quiz.jsx',
+    input: './src/lib/Quiz.tsx',
     output: [
       {
         file: 'dist/index.js',
