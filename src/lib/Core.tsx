@@ -414,77 +414,79 @@ function Core({
 
       {!endQuiz && (
         <div className="questionWrapperBody">
-          <div>
-            {`${appLocale.question} ${currentQuestionIndex + 1} / ${
-              questions.length
-            }:`}
-            <br />
-            {timer && allowPauseTimer && (
-              <button type="button" className="timerBtn" onClick={toggleTimer}>
-                {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
-              </button>
+          <div className="questionContentColumn">
+            <div>
+              {`${appLocale.question} ${currentQuestionIndex + 1} / ${
+                questions.length
+              }:`}
+              <br />
+              {timer && allowPauseTimer && (
+                <button type="button" className="timerBtn" onClick={toggleTimer}>
+                  {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
+                </button>
+              )}
+            </div>
+            {isRunning ? (
+              <>
+                <h3
+                  dangerouslySetInnerHTML={rawMarkup(
+                    `${
+                      activeQuestion && activeQuestion.question
+                    } ${appLocale.marksOfQuestion.replace(
+                      '<marks>',
+                      String(activeQuestion.point),
+                    )}`,
+                  )}
+                />
+                {activeQuestion && activeQuestion.questionPic && (
+                  <img src={activeQuestion.questionPic} alt="question" />
+                )}
+                {activeQuestion
+                  && renderTags(
+                    answerSelectionTypeState || 'single',
+                    Array.isArray(activeQuestion.correctAnswer) ? activeQuestion.correctAnswer.length : 1,
+                    activeQuestion.segment,
+                  )}
+                <div className="questionModal">
+                  <InstantFeedback
+                    question={activeQuestion}
+                    showInstantFeedback={showInstantFeedback}
+                    correctAnswer={isCorrect}
+                    incorrectAnswer={incorrectAnswer}
+                    onQuestionSubmit={onQuestionSubmit}
+                    userAnswer={[...userInput].pop()}
+                  />
+                </div>
+                {activeQuestion && renderAnswers(activeQuestion, buttons)}
+              </>
+            ) : (
+              <span className="timerPauseScreen dark:text-white text-black">
+                <br />
+                <br />
+                {appLocale.pauseScreenDisplay}
+              </span>
             )}
           </div>
-          {isRunning ? (
-            <>
-              <h3
-                dangerouslySetInnerHTML={rawMarkup(
-                  `${
-                    activeQuestion && activeQuestion.question
-                  } ${appLocale.marksOfQuestion.replace(
-                    '<marks>',
-                    String(activeQuestion.point),
-                  )}`,
-                )}
-              />
-              {activeQuestion && activeQuestion.questionPic && (
-                <img src={activeQuestion.questionPic} alt="question" />
+          {(showNextQuestionButton || allowNavigation) && isRunning && (
+            <div className="questionBtnContainer">
+              {allowNavigation && currentQuestionIndex > 0 && (
+                <button
+                  onClick={() => nextQuestion(currentQuestionIndex - 2)}
+                  className="prevQuestionBtn btn"
+                  type="button"
+                >
+                  {appLocale.prevQuestionBtn}
+                </button>
               )}
-              {activeQuestion
-                && renderTags(
-                  answerSelectionTypeState || 'single',
-                  Array.isArray(activeQuestion.correctAnswer) ? activeQuestion.correctAnswer.length : 1,
-                  activeQuestion.segment,
-                )}
-              <div className="questionModal">
-                <InstantFeedback
-                  question={activeQuestion}
-                  showInstantFeedback={showInstantFeedback}
-                  correctAnswer={isCorrect}
-                  incorrectAnswer={incorrectAnswer}
-                  onQuestionSubmit={onQuestionSubmit}
-                  userAnswer={[...userInput].pop()}
-                />
-              </div>
-              {activeQuestion && renderAnswers(activeQuestion, buttons)}
-              {(showNextQuestionButton || allowNavigation) && (
-                <div className="questionBtnContainer">
-                  {allowNavigation && currentQuestionIndex > 0 && (
-                    <button
-                      onClick={() => nextQuestion(currentQuestionIndex - 2)}
-                      className="prevQuestionBtn btn"
-                      type="button"
-                    >
-                      {appLocale.prevQuestionBtn}
-                    </button>
-                  )}
 
-                  <button
-                    onClick={() => nextQuestion(currentQuestionIndex)}
-                    className="nextQuestionBtn btn"
-                    type="button"
-                  >
-                    {appLocale.nextQuestionBtn}
-                  </button>
-                </div>
-              )}
-            </>
-          ) : (
-            <span className="timerPauseScreen dark:text-white text-black">
-              <br />
-              <br />
-              {appLocale.pauseScreenDisplay}
-            </span>
+              <button
+                onClick={() => nextQuestion(currentQuestionIndex)}
+                className="nextQuestionBtn btn"
+                type="button"
+              >
+                {appLocale.nextQuestionBtn}
+              </button>
+            </div>
           )}
         </div>
       )}
