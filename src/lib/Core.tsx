@@ -218,7 +218,7 @@ function Core({
             dangerouslySetInnerHTML={rawMarkup(
               `Q${question.questionIndex}: ${
                 question.question
-              } ${appLocale.marksOfQuestion.replace('<marks>', String(question.point))}`,
+              }${question.point ? ` ${appLocale.marksOfQuestion.replace('<marks>', String(question.point))}` : ''}`,
             )}
           />
           {question.questionPic && (
@@ -432,10 +432,10 @@ function Core({
                   dangerouslySetInnerHTML={rawMarkup(
                     `${
                       activeQuestion && activeQuestion.question
-                    } ${appLocale.marksOfQuestion.replace(
+                    }${activeQuestion?.point ? ` ${appLocale.marksOfQuestion.replace(
                       '<marks>',
                       String(activeQuestion.point),
-                    )}`,
+                    )}` : ''}`,
                   )}
                 />
                 {activeQuestion && activeQuestion.questionPic && (
